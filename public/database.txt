@@ -1,0 +1,10 @@
+DB name: animals
+Table name: animals
+
+rows:
+
+id (integer sequence)
+animal_type (varchar (30))
+animal_quantity (integer)
+
+animals_pkey CREATE UNIQUE INDEX animals_pkey ON animals USING btree (id)
