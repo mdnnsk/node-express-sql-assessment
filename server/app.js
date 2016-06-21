@@ -3,15 +3,16 @@ var express=require('express');
 var app=express();
 var path=require('path');
 var bodyParser=require('body-parser');
-var urlencodedParser=bodyParser.urlencoded({extended:false});
+// var urlencodedParser=bodyParser.urlencoded({extended:false});
 var pg=require('pg');
-
+var jsonParser = bodyParser.json();
 //set up connectionString for the db
 var connectionString='postgres://localhost:5432/animals';
 
 // set static public folder
 app.use( express.static('public'));
-
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
 // Start up the server
 var server = app.listen( 3000, 'localhost', function( req, res ){
   console.log( "server listening on " + server.address().port);
@@ -26,7 +27,7 @@ app.get( '/', function( req, res ){
 }); // end base url
 
 //POST for submitting animalSub
-app.post('/submitAnimals',urlencodedParser, function(req,res){
+app.post('/submitAnimals', jsonParser, function(req,res){
   var results =[];
   pg.connect( connectionString, function(err, client, done){
     console.log(req.body.quantity + " " + req.body.type);
@@ -34,7 +35,6 @@ app.post('/submitAnimals',urlencodedParser, function(req,res){
     var query = client.query( 'SELECT * FROM animals ORDER BY id DESC;' );
     console.log( "query: " + query );
     // push each row in query into our results array
-    var rows = 0;
     query.on( 'row', function ( row ){
       results.push( row );
     }); // end query push
@@ -43,21 +43,23 @@ app.post('/submitAnimals',urlencodedParser, function(req,res){
       return res.json( results );
     });
   });//end pgconnect
+
 });
 //post for get animals on load
-app.post('/getAnimals',urlencodedParser, function(req,res){
+app.get('/getAnimals', function(req,res){
   var results =[];
   pg.connect( connectionString, function(err, client, done){
     var query = client.query( 'SELECT * FROM animals ORDER BY id DESC;' );
     console.log( "query: " + query );
     // push each row in query into our results array
-    var rows = 0;
     query.on( 'row', function ( row ){
       results.push( row );
     }); // end query push
     query.on( 'end', function (){
       console.log(results);
       return res.json( results );
+
     });
+
   });//end pgconnect
 });

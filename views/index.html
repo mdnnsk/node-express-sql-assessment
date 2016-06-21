@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="myApp">
   <head>
     <meta charset="utf-8">
     <title>Node/Express and SQL Assessment</title>
-    <script src="vendors/jquery-3.0.0.min.js" charset="utf-8"></script>
+    <script src="vendors/angular.min.js" charset="utf-8"></script>
     <script src="scripts/client.js" charset="utf-8"></script>
   </head>
-  <body>
+  <body ng-controller="animalControl">
       <h1>WELCOME TO THE NU ZOO</h1>
       <h2>Want to turn your animal(s) in?</h2>
-      <input type="text" id="animalIn" name="animalIn" value="" placeholder="Type of animal(s)">
-      <button type="button" id="animalSub" name="animalSub">Hand the animal(s) over</button>
-      <div id="outputDiv"></div>
+      <input type="text" id="animalIn" ng-model="animalIn" value="" placeholder="Type of animal(s)">
+      <button type="button" id="animalSub"  ng-click="doShitNow()">Hand the animal(s) over</button>
+      <p> {{ animalsOut }} </p>
   </body>
 </html>
+<!-- onclick="window.location.reload();" -->
